@@ -1,5 +1,13 @@
 import { useCallback, useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
+import {
+  type CarouselApi,
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 import CurrentWeather from "./CurrentWeather";
 import DaysForecast from "./DaysForecast";
 import HourlyForecast from "./HourlyForecast";
@@ -13,6 +21,8 @@ function WeatherWidget() {
   const [forecastResponse, setForecastResponse] = useState<Forecast | null>(
     null
   );
+  const [carouselApi, setCarouselApi] = useState<CarouselApi | null>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
 
   const apiKey = import.meta.env.VITE_API_KEY;
 
@@ -78,8 +88,20 @@ function WeatherWidget() {
     loadWeather();
   }, [weatherData]);
 
-  const baseCardClassName =
-    "w-full rounded-2xl border-0 shadow-lg shadow-black/10";
+  useEffect(() => {
+    if (!carouselApi) return;
+    const onSelect = () => {
+      setActiveIndex(carouselApi.selectedScrollSnap());
+    };
+    onSelect();
+    carouselApi.on("select", onSelect);
+
+    return () => {
+      carouselApi.off("select", onSelect);
+    };
+  }, [carouselApi]);
+
+  const baseCardClassName = "w-full rounded-2xl border-0";
   const gradientClassName = getGradientClass(
     weatherResponse?.weather[0]?.icon
   );
@@ -120,19 +142,31 @@ function WeatherWidget() {
 
   return (
     <div className="flex min-h-screen items-center justify-center px-4 sm:px-6">
-      <div className="flex w-full max-w-md flex-col gap-4">
-        {(["current", "hourly", "daily"] as const).map((cardType, index) => (
-          <Card
-            className={
-              cardType === "hourly" || cardType === "daily"
-                ? baseCardClassName
-                : cardClassName
-            }
-            key={`weather-card-${index}`}
-          >
-            {renderCardContent(cardType)}
-          </Card>
-        ))}
+      <div className="w-full max-w-md rounded-2xl carousel-shadow-bottom overflow-visible">
+        <Carousel className="w-full" setApi={setCarouselApi}>
+        <CarouselContent className="items-stretch">
+          {(["current", "hourly", "daily"] as const).map((cardType, index) => (
+            <CarouselItem
+              className={`flex transition-opacity duration-300 ${
+                index === activeIndex ? "opacity-100" : "opacity-50"
+              }`}
+              key={`weather-card-${index}`}
+            >
+              <Card
+                className={
+                  cardType === "hourly" || cardType === "daily"
+                    ? baseCardClassName
+                    : cardClassName
+                }
+              >
+                {renderCardContent(cardType)}
+              </Card>
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+        <CarouselPrevious />
+        <CarouselNext />
+        </Carousel>
       </div>
     </div>
   );
