@@ -18,7 +18,7 @@ Widget meteo moderno e responsive sviluppato come parte della **Freedome Front-E
 
 ## 🧠 Concetto del Progetto
 
-Il widget è pensato per essere integrato all’interno delle pagine attività di **freedome.it**, mostrando le previsioni meteo della località in cui si svolge l’esperienza.
+Il widget è pensato per essere integrato all’interno delle pagine attività di **freedome**, mostrando le previsioni meteo della località in cui si svolge l’esperienza.
 
 La località viene passata direttamente al widget come **prop**, senza possibilità di selezione da parte dell’utente.
 
