@@ -5,8 +5,7 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
+  CarouselDots,
 } from "@/components/ui/carousel";
 import CurrentWeather from "./CurrentWeather";
 import DaysForecast from "./DaysForecast";
@@ -164,8 +163,7 @@ function WeatherWidget() {
             </CarouselItem>
           ))}
         </CarouselContent>
-        <CarouselPrevious />
-        <CarouselNext />
+        <CarouselDots count={3} />
         </Carousel>
       </div>
     </div>

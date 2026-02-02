@@ -229,6 +229,45 @@ function CarouselNext({
   )
 }
 
+function CarouselDots({ count }: { count: number }) {
+  const { api } = useCarousel()
+  const [selectedIndex, setSelectedIndex] = React.useState(0)
+
+  React.useEffect(() => {
+    if (!api) return
+    const onSelect = () => setSelectedIndex(api.selectedScrollSnap())
+    onSelect()
+    api.on("select", onSelect)
+    return () => {
+      api.off("select", onSelect)
+    }
+  }, [api])
+
+  return (
+    <div
+      className="absolute bottom-2 left-0 right-0 mb-2 flex justify-center gap-2"
+      role="tablist"
+    >
+      {Array.from({ length: count }).map((_, index) => (
+        <button
+          type="button"
+          key={index}
+          role="tab"
+          aria-label={`Vai alla card ${index + 1}`}
+          aria-selected={index === selectedIndex}
+          onClick={() => api?.scrollTo(index)}
+          className={cn(
+            "h-2 w-2 rounded-full transition-colors cursor-pointer",
+            index === selectedIndex
+              ? "bg-[#313A52]"
+              : "bg-[#D7D7DB] hover:bg-[#313A52]/60"
+          )}
+        />
+      ))}
+    </div>
+  )
+}
+
 export {
   type CarouselApi,
   Carousel,
@@ -236,4 +275,5 @@ export {
   CarouselItem,
   CarouselPrevious,
   CarouselNext,
+  CarouselDots,
 }

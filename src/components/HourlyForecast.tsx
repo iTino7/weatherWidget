@@ -29,17 +29,17 @@ function HourlyForecast({
             className="flex flex-col items-center justify-center rounded-xl bg-white/70 px-2 py-3"
             key={slotSeconds}
           >
-            <span className="text-sm font-semibold">{hourLabel}</span>
             {matchingForecast ? (
               <>
+                <span className="text-sm font-semibold">
+                  {convertKelvinToCelsius(matchingForecast.main?.temp)}
+                </span>
                 <img
                   className="h-8 w-8"
                   src={getWeatherIconUrl(matchingForecast.weather[0]?.icon)}
                   alt={matchingForecast.weather[0]?.description ?? "forecast"}
                 />
-                <span className="text-sm font-semibold">
-                  {convertKelvinToCelsius(matchingForecast.main?.temp)}
-                </span>
+                <span className="text-sm font-semibold">{hourLabel}</span>
               </>
             ) : (
               <Spinner className="size-4 text-[#313A52]" />
