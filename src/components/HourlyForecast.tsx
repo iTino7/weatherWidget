@@ -1,16 +1,9 @@
 import { Spinner } from "@/components/ui/spinner";
-import type { List } from "../types/forecastData";
-
-type HourlyForecastProps = {
-  forecastList?: List[];
-  hoursCount?: number;
-  getWeatherIconUrl: (icon?: string) => string;
-  convertKelvinToCelsius: (kelvin?: number) => string;
-};
+import type { HourlyForecastProps } from "../types/forecastComponents";
 
 function HourlyForecast({
   forecastList = [],
-  hoursCount = 5,
+  hoursCount,
   getWeatherIconUrl,
   convertKelvinToCelsius,
 }: HourlyForecastProps) {

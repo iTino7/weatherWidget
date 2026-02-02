@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Spinner } from "@/components/ui/spinner";
+import CurrentWeather from "./CurrentWeather";
+import DaysForecast from "./DaysForecast";
 import HourlyForecast from "./HourlyForecast";
 import type { Forecast } from "../types/forecastData";
 import type { Weather, Sys } from "../types/weatherData";
@@ -84,43 +85,33 @@ function WeatherWidget() {
   );
   const cardClassName = `${baseCardClassName} ${gradientClassName}`.trim();
 
-  const renderCardContent = (showHourlyForecast = false) => {
+  const renderCardContent = (
+    cardType: "current" | "hourly" | "daily"
+  ) => {
     return (
       <CardContent className="pl-8">
-        {!showHourlyForecast && (
-          <div className="flex items-center justify-between gap-4">
-            <div>
-              <h3 className="text-7xl font-bold text-[#313A52] ml-[-15px]">
-                {weatherResponse?.main?.temp != null ? (
-                  convertKelvinToCelsius(weatherResponse?.main?.temp)
-                ) : (
-                  <Spinner className="size-8 text-[#313A52]" />
-                )}
-              </h3>
-              <h2 className="text-[#D7D7DB]">
-                {forecastResponse?.city?.name ?? weatherResponse?.name},{" "}
-                {weatherResponse?.sys?.country}
-              </h2>
-            </div>
-            <div className="flex items-center justify-end">
-            {weatherResponse?.weather[0]?.icon ? (
-              <img
-                className="h-20 w-20 sm:h-22 sm:w-22 lg:h-26 lg:w-26"
-                src={getWeatherIconUrl(weatherResponse.weather[0].icon)}
-                alt={weatherResponse.weather[0].description}
-              />
-            ) : (
-              <Spinner className="size-6 text-[#313A52]" />
-            )}
-            </div>
-          </div>
+        {cardType === "current" && (
+          <CurrentWeather
+            weatherResponse={weatherResponse}
+            forecastResponse={forecastResponse}
+            getWeatherIconUrl={getWeatherIconUrl}
+            convertKelvinToCelsius={convertKelvinToCelsius}
+          />
         )}
-        {showHourlyForecast && (
+        {cardType === "hourly" && (
           <HourlyForecast
             forecastList={forecastResponse?.list}
             getWeatherIconUrl={getWeatherIconUrl}
             convertKelvinToCelsius={convertKelvinToCelsius}
             hoursCount={5}
+          />
+        )}
+        {cardType === "daily" && (
+          <DaysForecast
+            forecastList={forecastResponse?.list}
+            getWeatherIconUrl={getWeatherIconUrl}
+            convertKelvinToCelsius={convertKelvinToCelsius}
+            daysCount={5}
           />
         )}
       </CardContent>
@@ -130,12 +121,16 @@ function WeatherWidget() {
   return (
     <div className="flex min-h-screen items-center justify-center px-4 sm:px-6">
       <div className="flex w-full max-w-md flex-col gap-4">
-        {[0, 1, 2].map((index) => (
+        {(["current", "hourly", "daily"] as const).map((cardType, index) => (
           <Card
-            className={index === 1 ? baseCardClassName : cardClassName}
+            className={
+              cardType === "hourly" || cardType === "daily"
+                ? baseCardClassName
+                : cardClassName
+            }
             key={`weather-card-${index}`}
           >
-            {renderCardContent(index === 1)}
+            {renderCardContent(cardType)}
           </Card>
         ))}
       </div>
