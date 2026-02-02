@@ -6,7 +6,9 @@ function App() {
 
   return (
     <>
-      <WeatherWidget />
+      <div className="bg-[#F5F5F5]">
+        <WeatherWidget />
+      </div>
     </>
   )
 }
