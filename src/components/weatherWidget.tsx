@@ -47,6 +47,20 @@ function WeatherWidget() {
     return icon ? `https://openweathermap.org/img/wn/${icon}@2x.png` : "";
   }
 
+  function getGradientClass(icon?: string) {
+    const prefix = icon?.slice(0, 2);
+    if (prefix === "01") {
+      return "weather-gradient-sun";
+    }
+    if (prefix && ["02", "03", "04"].includes(prefix)) {
+      return "weather-gradient-clouds";
+    }
+    if (prefix && ["09", "10"].includes(prefix)) {
+      return "weather-gradient-rain";
+    }
+    return "";
+  }
+
   useEffect(() => {
     const loadWeather = async () => {
       const current = await weatherData("weather");
@@ -62,8 +76,12 @@ function WeatherWidget() {
   }, [weatherData]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center">
-      <Card className="w-full max-w-md rounded-2xl border-0 shadow-lg shadow-black/10">
+    <div className="flex min-h-screen items-center justify-center px-4 sm:px-6">
+      <Card
+        className={`w-full max-w-md rounded-2xl border-0 shadow-lg shadow-black/10 ${getGradientClass(
+          weatherResponse?.weather[0]?.icon
+        )}`.trim()}
+      >
         <CardContent className="pl-8">
           <div className="flex items-center justify-between gap-4">
             <div>
@@ -78,6 +96,7 @@ function WeatherWidget() {
             <div className="flex items-center justify-end">
               {weatherResponse?.weather[0]?.icon ? (
                 <img
+                  className="h-20 w-20 sm:h-22 sm:w-22 lg:h-26 lg:w-26"
                   src={getWeatherIconUrl(weatherResponse.weather[0].icon)}
                   alt={weatherResponse.weather[0].description}
                 />

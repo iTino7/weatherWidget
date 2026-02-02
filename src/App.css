@@ -121,3 +121,27 @@
     @apply bg-background text-foreground;
   }
 }
+
+.weather-gradient-sun {
+  background-image: linear-gradient(
+    to left,
+    rgba(255, 204, 102, 0.32),
+    rgba(255, 204, 102, 0) 60%
+  );
+}
+
+.weather-gradient-clouds {
+  background-image: linear-gradient(
+    to left,
+    rgba(176, 185, 196, 0.32),
+    rgba(176, 185, 196, 0) 60%
+  );
+}
+
+.weather-gradient-rain {
+  background-image: linear-gradient(
+    to left,
+    rgba(96, 156, 255, 0.32),
+    rgba(96, 156, 255, 0) 60%
+  );
+}
