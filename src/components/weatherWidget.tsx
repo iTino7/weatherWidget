@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
+import { Spinner } from "@/components/ui/spinner";
+import HourlyForecast from "./HourlyForecast";
 import type { Forecast } from "../types/forecastData";
 import type { Weather, Sys } from "../types/weatherData";
 
@@ -75,18 +77,25 @@ function WeatherWidget() {
     loadWeather();
   }, [weatherData]);
 
-  return (
-    <div className="flex min-h-screen items-center justify-center px-4 sm:px-6">
-      <Card
-        className={`w-full max-w-md rounded-2xl border-0 shadow-lg shadow-black/10 ${getGradientClass(
-          weatherResponse?.weather[0]?.icon
-        )}`.trim()}
-      >
-        <CardContent className="pl-8">
+  const baseCardClassName =
+    "w-full rounded-2xl border-0 shadow-lg shadow-black/10";
+  const gradientClassName = getGradientClass(
+    weatherResponse?.weather[0]?.icon
+  );
+  const cardClassName = `${baseCardClassName} ${gradientClassName}`.trim();
+
+  const renderCardContent = (showHourlyForecast = false) => {
+    return (
+      <CardContent className="pl-8">
+        {!showHourlyForecast && (
           <div className="flex items-center justify-between gap-4">
             <div>
               <h3 className="text-7xl font-bold text-[#313A52] ml-[-15px]">
-                {convertKelvinToCelsius(weatherResponse?.main?.temp)}
+                {weatherResponse?.main?.temp != null ? (
+                  convertKelvinToCelsius(weatherResponse?.main?.temp)
+                ) : (
+                  <Spinner className="size-8 text-[#313A52]" />
+                )}
               </h3>
               <h2 className="text-[#D7D7DB]">
                 {forecastResponse?.city?.name ?? weatherResponse?.name},{" "}
@@ -94,19 +103,42 @@ function WeatherWidget() {
               </h2>
             </div>
             <div className="flex items-center justify-end">
-              {weatherResponse?.weather[0]?.icon ? (
-                <img
-                  className="h-20 w-20 sm:h-22 sm:w-22 lg:h-26 lg:w-26"
-                  src={getWeatherIconUrl(weatherResponse.weather[0].icon)}
-                  alt={weatherResponse.weather[0].description}
-                />
-              ) : (
-                "-"
-              )}
+            {weatherResponse?.weather[0]?.icon ? (
+              <img
+                className="h-20 w-20 sm:h-22 sm:w-22 lg:h-26 lg:w-26"
+                src={getWeatherIconUrl(weatherResponse.weather[0].icon)}
+                alt={weatherResponse.weather[0].description}
+              />
+            ) : (
+              <Spinner className="size-6 text-[#313A52]" />
+            )}
             </div>
           </div>
-        </CardContent>
-      </Card>
+        )}
+        {showHourlyForecast && (
+          <HourlyForecast
+            forecastList={forecastResponse?.list}
+            getWeatherIconUrl={getWeatherIconUrl}
+            convertKelvinToCelsius={convertKelvinToCelsius}
+            hoursCount={5}
+          />
+        )}
+      </CardContent>
+    );
+  };
+
+  return (
+    <div className="flex min-h-screen items-center justify-center px-4 sm:px-6">
+      <div className="flex w-full max-w-md flex-col gap-4">
+        {[0, 1, 2].map((index) => (
+          <Card
+            className={index === 1 ? baseCardClassName : cardClassName}
+            key={`weather-card-${index}`}
+          >
+            {renderCardContent(index === 1)}
+          </Card>
+        ))}
+      </div>
     </div>
   );
 }
