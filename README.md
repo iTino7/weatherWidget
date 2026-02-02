@@ -1,73 +1,67 @@
-# React + TypeScript + Vite
+# Weather Widget Challenge ☀️🌧️
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Widget meteo moderno e responsive sviluppato come parte della **Freedome Front-End Challenge**.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Funzionalità
 
-## React Compiler
+* **Meteo Attuale** – Visualizzazione delle condizioni meteo in tempo reale
+* **Previsioni Orarie (prossime 5 ore)** – Previsioni meteo a breve termine
+* **Previsioni Giornaliere (prossimi 5 giorni)** – Previsioni aggregate per giorno
+* **Navigazione Swipe / Carousel** – Navigazione fluida tra le viste tramite **shadcn/ui Carousel**
+* **Design Responsive** – Ottimizzato per mobile, tablet e desktop
+* **TypeScript** – Tipizzazione completa delle risposte API
+* **Architettura a Componenti** – Struttura modulare, pulita e manutenibile
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+---
 
-## Expanding the ESLint configuration
+## 🧠 Concetto del Progetto
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Il widget è pensato per essere integrato all’interno delle pagine attività di **freedome.it**, mostrando le previsioni meteo della località in cui si svolge l’esperienza.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+La località viene passata direttamente al widget come **prop**, senza possibilità di selezione da parte dell’utente.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+---
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## 🛠️ Stack Tecnologico
+
+* **React**
+* **TypeScript**
+* **Tailwind CSS**
+* **shadcn/ui**
+* **OpenWeatherMap API**
+
+---
+
+## 📦 API Utilizzate
+
+I dati meteo sono recuperati tramite le **OpenWeatherMap API**:
+
+* **Meteo attuale** → `/data/2.5/weather`
+* **Previsioni 5 giorni / 3 ore** → `/data/2.5/forecast`
+
+I dati delle previsioni vengono elaborati lato client per ottenere:
+
+* Previsioni delle **prossime 5 ore**
+* Previsioni **giornaliere per 5 giorni**
+
+---
+
+## ⚙️ Configurazione Ambiente
+
+Crea un file `.env` nella root del progetto e inserisci la tua API key:
+
+```
+VITE_API_KEY=xxxxxxx
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## ▶️ Avvio del Progetto
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev
 ```
+
