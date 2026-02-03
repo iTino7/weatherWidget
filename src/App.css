@@ -133,8 +133,8 @@
 .weather-gradient-clouds {
   background-image: linear-gradient(
     to left,
-    rgba(176, 185, 196, 0.32),
-    rgba(176, 185, 196, 0) 60%
+    rgba(100, 110, 125, 0.5),
+    rgba(100, 110, 125, 0) 60%
   );
 }
 
